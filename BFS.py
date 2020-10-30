@@ -1,6 +1,6 @@
 import math
 
-from Cell import Cell
+from cell import Cell
 class BFS:
     def __init__(self, SCREEN_WIDTH, SCREEN_HEIGHT):
         self.cells = []
@@ -21,12 +21,11 @@ class BFS:
         self.goal = self.cells[self.NUM_CELLS-1][self.NUM_CELLS-1]
 
     def step(self):
-        if (len(self.queue) > 0):
+        if len(self.queue) > 0:
             current, path = self.queue.pop(0)
             path.append(current)
             current.is_visited = True
-            if (current == self.goal):
-                print ("Found!")
+            if current == self.goal:
                 return path
             index = self.find_cell_index(current)
             for cell in self.get_adjacent_cells(index[0], index[1]):
@@ -38,9 +37,10 @@ class BFS:
     def get_adjacent_cells(self, x_index, y_index):
         for i in range(x_index - 1, x_index + 2):
             for j in range(y_index - 1, y_index + 2):
-                if (i >= 0 and i < self.NUM_CELLS and j >= 0 and j < self.NUM_CELLS):
-                    if (abs(i - x_index) is not abs(j - y_index)):
-                        if (self.cells[i][j].is_wall or self.cells[i][j].is_discovered):
+                if i >= 0 and i < self.NUM_CELLS and j >= 0 and j < self.NUM_CELLS:
+                    # disallow diagonal movement
+                    if abs(i - x_index) is not abs(j - y_index):
+                        if self.cells[i][j].is_wall or self.cells[i][j].is_discovered:
                             continue
                         yield self.cells[i][j]
 
